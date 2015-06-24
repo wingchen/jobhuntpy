@@ -7,7 +7,6 @@ Usage:
 from setuptools import setup
 
 APP = ['jobhuntpy.py']
-OPTIONS = {}
 
 setup(
     app=APP,

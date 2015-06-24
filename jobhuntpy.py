@@ -1,10 +1,15 @@
+# TODO: scrap indeed
 # TODO: thread up indeed scarping
+# TODO: build up mac GUI
+# TODO: test cases
 
 import argparse
+import collections
 import csv
 import getpass
 import json
 import logging
+import re
 import requests
 
 from bs4 import BeautifulSoup
@@ -17,6 +22,8 @@ INDEED_ENDPOINT = 'http://www.indeed.com/'
 MOCK_BROWSER_AGENT = {
     'User-agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; it; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11'
 }
+
+JobContainer = collections.namedtuple('JobContainer', ['link', 'title', 'company', 'location', 'time'])
 
 
 def parse_args():
@@ -60,8 +67,61 @@ def get_all_connections(email, password):
     return connections_obj['contacts']
 
 
-def get_all_indeed_related_jobs(driver, keyword, company, city, radius=50):
-    pass
+def _parse_single_page_for_jobs(page_number, keyword, company, city, state, radius):
+
+    page_url = '{}jobs?as_and={}&as_cmp={}&jt=all&radius={}&l={}%2C+{}&start={}'.format(
+        INDEED_ENDPOINT, keyword, company, radius, city, state, page_number * 10)
+    page_response_text = requests.get(page_url, headers=MOCK_BROWSER_AGENT).text
+    page_response_soup = BeautifulSoup(page_response_text)
+
+    job_hrefs = page_response_soup.find_all(class_='jobtitle')
+    job_divs = map(lambda j: j.parent, job_hrefs)
+
+    jobs = []
+
+    for job_div in job_divs:
+
+        link_tags = job_div.select('h2 a')
+        job_link = '{}{}'.format(INDEED_ENDPOINT, link_tags[0]['href']) if len(link_tags) > 0 else None
+        job_title = link_tags[0]['title'] if len(link_tags) > 0 else None
+
+        copmany_tag = job_div.select('span span b')
+        job_company = copmany_tag[0].text if len(copmany_tag) > 0 else None
+
+        location_tag = job_div.select('span span span')
+        job_location = location_tag[0].text if len(location_tag) > 0 else None
+
+        date_tag = job_div.select('span.date')
+        job_time = date_tag[0].text if len(date_tag) > 0 else None
+
+        if job_link and job_title:
+            jobs.append(JobContainer(job_link, job_title, job_company, job_location, job_time))
+
+    return jobs
+
+
+def get_all_indeed_jobs(keyword, company, city, state, radius=50):
+    url = '{}jobs?as_and={}&as_cmp={}&jt=all&radius={}&l={}%2C+{}'.format(
+        INDEED_ENDPOINT, keyword, company, radius, city, state)
+    response_text = requests.get(url, headers=MOCK_BROWSER_AGENT).text
+    response_soup = BeautifulSoup(response_text)
+
+    # get page count
+    all_job_count_str = response_soup.find(text=re.compile('Jobs \d+ to \d+ of \d+'))
+    all_job_count = 0
+
+    if all_job_count_str:
+        all_job_count = int(all_job_count_str.split()[5])
+    else:
+        raise RuntimeError('Could not figure out the total job count.')
+
+    # thread out to get all the job posting in the pages
+    if all_job_count != 0:
+        page_count = all_job_count / 10
+        spider_threads = []
+
+        # spin off the thread pool
+
 
 
 def connections_obj_to_csv(connections):
