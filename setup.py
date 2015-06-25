@@ -10,7 +10,7 @@ APP = ['jobhuntpy.py']
 
 setup(
     app=APP,
-    install_requires=['argparse', 'requests'],
+    install_requires=['argparse', 'nose', 'requests'],
     author="Winston Chen",
     author_email="darwing.chen@gmail.com",
     license='MIT',

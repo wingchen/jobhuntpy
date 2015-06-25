@@ -1,4 +1,4 @@
-# TODO: scrap indeed
+# TODO: handle thread failure
 # TODO: thread up indeed scarping
 # TODO: build up mac GUI
 # TODO: test cases
@@ -9,6 +9,8 @@ import csv
 import getpass
 import json
 import logging
+import threading
+import time
 import re
 import requests
 
@@ -67,7 +69,7 @@ def get_all_connections(email, password):
     return connections_obj['contacts']
 
 
-def _parse_single_page_for_jobs(page_number, keyword, company, city, state, radius):
+def _parse_single_page_for_jobs(page_number, keyword, company, city, state, radius, result_jobs):
 
     page_url = '{}jobs?as_and={}&as_cmp={}&jt=all&radius={}&l={}%2C+{}&start={}'.format(
         INDEED_ENDPOINT, keyword, company, radius, city, state, page_number * 10)
@@ -83,21 +85,18 @@ def _parse_single_page_for_jobs(page_number, keyword, company, city, state, radi
 
         link_tags = job_div.select('h2 a')
         job_link = '{}{}'.format(INDEED_ENDPOINT, link_tags[0]['href']) if len(link_tags) > 0 else None
-        job_title = link_tags[0]['title'] if len(link_tags) > 0 else None
-
-        copmany_tag = job_div.select('span span b')
-        job_company = copmany_tag[0].text if len(copmany_tag) > 0 else None
+        job_title = link_tags[0]['title'] if len(link_tags) > 0 else ''
 
         location_tag = job_div.select('span span span')
-        job_location = location_tag[0].text if len(location_tag) > 0 else None
+        job_location = location_tag[0].text if len(location_tag) > 0 else ''
 
         date_tag = job_div.select('span.date')
-        job_time = date_tag[0].text if len(date_tag) > 0 else None
+        job_time = date_tag[0].text if len(date_tag) > 0 else ''
 
-        if job_link and job_title:
-            jobs.append(JobContainer(job_link, job_title, job_company, job_location, job_time))
+        if job_link != '' and job_title != '':
+            jobs.append(JobContainer(job_link, job_title, company, job_location, job_time))
 
-    return jobs
+    result_jobs.extend(jobs)
 
 
 def get_all_indeed_jobs(keyword, company, city, state, radius=50):
@@ -115,17 +114,40 @@ def get_all_indeed_jobs(keyword, company, city, state, radius=50):
     else:
         raise RuntimeError('Could not figure out the total job count.')
 
+    all_jobs = [] # TODO: use thread safe queue here
+
     # thread out to get all the job posting in the pages
     if all_job_count != 0:
-        page_count = all_job_count / 10
-        spider_threads = []
+        page_counts = range(all_job_count / 10)
+        thread_pool = []
+        started = False
 
-        # spin off the thread pool
+        # thread out to get jobs
+        while not started and len(thread_pool) == 0:
+            started = True
 
+            # remove the done threads
+            for t in thread_pool:
+                if not t.isAlive():
+                    thread_pool.remove(t)
+
+            # spin of threads if thread count less than 10
+            if len(thread_pool) < 10:
+                thread = threading.Thread(
+                    _parse_single_page_for_jobs,
+                    args=(page_counts.next(), keyword, company, city, state, radius, all_jobs))
+
+                thread.setDaemon(True)
+                thread_pool.append(thread)
+                thread.start()
+
+            time.sleep(1)
+
+    return all_jobs
 
 
 def connections_obj_to_csv(connections):
-    headers = ['Company', 'Name', 'Title', 'location']
+    headers = ['Company', 'Name', 'Title', 'Location']
 
     with open('connections.csv', 'wb') as f:
         writer = csv.writer(f)
@@ -150,6 +172,26 @@ def connections_obj_to_csv(connections):
     logging.info('Linkedin connections exported.')
 
 
+def jobs_obj_to_csv(jobs):
+    headers = ['Company', 'Title', 'Location', 'URL', 'Time']
+
+    with open('jobs.csv', 'wb') as f:
+        writer = csv.writer(f)
+        writer.writerow(headers)
+
+        for job in jobs:
+            try:
+                data = [job.company, job.title, job.location, job.link, job.time]
+                data = map(lambda d: d.encode("utf-8"), data)
+                writer.writerow(data)
+
+            except Exception, e:
+                print(e.message)
+                print('Ignoring {}'.format(job))
+
+    logging.info('All current indeed jobs exported.')
+
+
 def main():
     args = parse_args()
 
@@ -158,6 +200,17 @@ def main():
 
     connections = get_all_connections(args.email, password)
     connections_obj_to_csv(connections)
+
+    companies = collections.Set([])
+    for connection in connections:
+        companies += connection['company']
+
+    jobs = []
+    for company in companies:
+        logging.info('Downloading all {} jobs from company {}'.format(args.keyword, company))
+        jobs.extend(get_all_indeed_jobs(args.keyword, company, args.city, args.state))
+
+    jobs_obj_to_csv(jobs)
 
 
 if __name__ == '__main__':
