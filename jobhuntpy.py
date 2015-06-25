@@ -55,6 +55,13 @@ def parse_args():
 
 
 def get_all_connections(email, password):
+    '''
+    Gets all the connection(friend) information from user's linkedin account.
+
+    :param email:       (str), the email user used to sign up for her linkedin account
+    :param password:    (str), the password to user's linkedin account
+    :return:            (list), a list of user's connections from her linkedin account
+    '''
     client = requests.Session()
 
     html = client.get(LINKEDIN_ENDPOINT).content
@@ -88,7 +95,11 @@ def get_all_connections(email, password):
 
 
 def _parse_single_page_for_jobs(page_number, keyword, company, city, state, radius, result_jobs):
-
+    '''
+    _parse_single_page_for_jobs is a private function used by get_all_indeed_jobs to extract
+    the jobs from a single indeed.com's job search page.
+    :return:
+    '''
     page_url = '{}jobs?as_and={}&as_cmp={}&jt=all&radius={}&l={}%2C+{}&start={}'.format(
         INDEED_ENDPOINT, keyword, company, radius, city, state, page_number * 10)
 
@@ -121,6 +132,16 @@ def _parse_single_page_for_jobs(page_number, keyword, company, city, state, radi
 
 
 def get_all_indeed_jobs(keyword, company, city, state, radius=50):
+    '''
+    Get all the available indeed jobs info with the passed-in parameter as criteria.
+
+    :param keyword:     (str), the keyword used to match the jobs, exp: marketing, software engineering
+    :param company:     (str), the company's name used to match the jobs, exp: Apple, google
+    :param city:        (str), the city's full name where the job locates, exp: San Francisco, Santa Clara
+    :param state:       (str), the state's short name where the job locates, exp: CA, WA
+    :param radius:      (int), how far the job can be away from the designated city in miles, exp: 25, 50, 100
+    :return:            list(JobContainer), the jobs extracted from indeed.com with the passed-in criteria
+    '''
     company = company.encode("utf-8")
     keyword = keyword.encode("utf-8")
     city = city.encode("utf-8")
@@ -171,6 +192,12 @@ def get_all_indeed_jobs(keyword, company, city, state, radius=50):
 
 
 def connections_obj_to_csv(connections):
+    '''
+    Writes a list of user's linkedin connection into a csv file.
+
+    :param connections:     (list), the linkedin connections the user has in her linkedin account
+    :return:
+    '''
     headers = ['Company', 'Name', 'Title', 'Location']
 
     with open('connections.csv', 'wb') as f:
@@ -196,6 +223,11 @@ def connections_obj_to_csv(connections):
 
 
 def jobs_obj_to_csv(jobs):
+    '''
+    Writes a list to JobContainer into a csv file.
+
+    :param jobs:    list(JobContainer), the jobs extracted from indeed.com.
+    '''
     headers = ['Company', 'Title', 'Location', 'URL', 'Time']
 
     with open('jobs.csv', 'wb') as f:
