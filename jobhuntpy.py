@@ -1,6 +1,6 @@
 # TODO: handle thread failure
-# TODO: thread up indeed scarping
-# TODO: build up mac GUI
+# TODO: logging to console
+# TODO: build up mac/windows GUI
 # TODO: test cases
 
 import argparse
@@ -9,12 +9,14 @@ import csv
 import getpass
 import json
 import logging
+import sys
 import threading
 import time
 import re
 import requests
 
 from bs4 import BeautifulSoup
+from sets import Set
 
 LINKEDIN_ENDPOINT = 'https://www.linkedin.com/'
 LINKEDIN_LOGIN_URL = 'https://www.linkedin.com/uas/login-submit'
@@ -27,11 +29,27 @@ MOCK_BROWSER_AGENT = {
 
 JobContainer = collections.namedtuple('JobContainer', ['link', 'title', 'company', 'location', 'time'])
 
+# configure logger
+logger = logging.getLogger('jobhuntpy')
+logger.setLevel(logging.DEBUG)
+
+ch = logging.StreamHandler(sys.stdout)
+ch.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+
+logger.addHandler(ch)
+
 
 def parse_args():
     parser = argparse.ArgumentParser(
         description='We need your linkedin email and password to aggregate your data for you.')
+    # args.keyword, args.city, args.state
     parser.add_argument('-e', '--email', type=str, help='The email you used to sign up in linkedin.')
+    parser.add_argument('-k', '--keyword', type=str, help='The keyword you wish to appear in the matched jobs.')
+    parser.add_argument('-c', '--city', type=str, help='The city you wish to work in.')
+    parser.add_argument('-s', '--state', type=str, help='The state of the city, for example, CA for California.')
 
     return parser.parse_args()
 
@@ -56,15 +74,15 @@ def get_all_connections(email, password):
 
     connections_obj = response.json()
 
-    logging.debug(json.dumps(connections_obj, indent=4))
-    logging.info('Total Connection count: {}'.format(connections_obj['paging']['total']))
+    logger.debug(json.dumps(connections_obj, indent=4))
+    logger.info('Total Connection count: {}'.format(connections_obj['paging']['total']))
 
     query = 'contacts/api/contacts/more/?start=0&count={}&fields=id%2Cname%2Ccompany%2Ctitle%2Cgeo_location'.format(
         connections_obj['paging']['total'])
     response = client.get('{}{}'.format(LINKEDIN_ENDPOINT, query), headers=MOCK_BROWSER_AGENT, timeout=60)
 
     connections_obj = response.json()
-    logging.debug(json.dumps(connections_obj, indent=4))
+    logger.debug(json.dumps(connections_obj, indent=4))
 
     return connections_obj['contacts']
 
@@ -73,6 +91,9 @@ def _parse_single_page_for_jobs(page_number, keyword, company, city, state, radi
 
     page_url = '{}jobs?as_and={}&as_cmp={}&jt=all&radius={}&l={}%2C+{}&start={}'.format(
         INDEED_ENDPOINT, keyword, company, radius, city, state, page_number * 10)
+
+    logger.debug('Scraping page: {}'.format(page_url))
+
     page_response_text = requests.get(page_url, headers=MOCK_BROWSER_AGENT).text
     page_response_soup = BeautifulSoup(page_response_text)
 
@@ -100,8 +121,14 @@ def _parse_single_page_for_jobs(page_number, keyword, company, city, state, radi
 
 
 def get_all_indeed_jobs(keyword, company, city, state, radius=50):
+    company = company.encode("utf-8")
+    keyword = keyword.encode("utf-8")
+    city = city.encode("utf-8")
+    state = state.encode("utf-8")
+
     url = '{}jobs?as_and={}&as_cmp={}&jt=all&radius={}&l={}%2C+{}'.format(
         INDEED_ENDPOINT, keyword, company, radius, city, state)
+
     response_text = requests.get(url, headers=MOCK_BROWSER_AGENT).text
     response_soup = BeautifulSoup(response_text)
 
@@ -111,20 +138,18 @@ def get_all_indeed_jobs(keyword, company, city, state, radius=50):
 
     if all_job_count_str:
         all_job_count = int(all_job_count_str.split()[5])
-    else:
-        raise RuntimeError('Could not figure out the total job count.')
 
-    all_jobs = [] # TODO: use thread safe queue here
+    logger.info('Found {} related jobs at {} in {}'.format(all_job_count, company, city))
+
+    all_jobs = []
 
     # thread out to get all the job posting in the pages
     if all_job_count != 0:
-        page_counts = range(all_job_count / 10)
+        page_counts = collections.deque(range(all_job_count / 10)) if all_job_count != 0 else [0]
         thread_pool = []
-        started = False
 
         # thread out to get jobs
-        while not started and len(thread_pool) == 0:
-            started = True
+        while len(page_counts) != 0 and len(thread_pool) == 0:
 
             # remove the done threads
             for t in thread_pool:
@@ -133,9 +158,8 @@ def get_all_indeed_jobs(keyword, company, city, state, radius=50):
 
             # spin of threads if thread count less than 10
             if len(thread_pool) < 10:
-                thread = threading.Thread(
-                    _parse_single_page_for_jobs,
-                    args=(page_counts.next(), keyword, company, city, state, radius, all_jobs))
+                args = (page_counts.pop(), keyword, company, city, state, radius, all_jobs)
+                thread = threading.Thread(target=_parse_single_page_for_jobs, args=args)
 
                 thread.setDaemon(True)
                 thread_pool.append(thread)
@@ -165,11 +189,10 @@ def connections_obj_to_csv(connections):
                 data = map(lambda d: d.encode("utf-8"), data)
                 writer.writerow(data)
 
-            except Exception, e:
-                print(e.message)
-                print('Ignoring {}'.format(connection))
+            except:
+                logger.exception('Ignoring {}'.format(connection))
 
-    logging.info('Linkedin connections exported.')
+    logger.info('Linkedin connections exported.')
 
 
 def jobs_obj_to_csv(jobs):
@@ -185,32 +208,34 @@ def jobs_obj_to_csv(jobs):
                 data = map(lambda d: d.encode("utf-8"), data)
                 writer.writerow(data)
 
-            except Exception, e:
-                print(e.message)
-                print('Ignoring {}'.format(job))
+            except:
+                logger.exception('Ignoring {}'.format(job))
 
-    logging.info('All current indeed jobs exported.')
+    logger.info('All current indeed jobs exported.')
 
 
 def main():
     args = parse_args()
 
     print('Please type in your linkedin password.')
+
     password = getpass.getpass()
 
     connections = get_all_connections(args.email, password)
     connections_obj_to_csv(connections)
 
-    companies = collections.Set([])
+    companies = Set([])
     for connection in connections:
-        companies += connection['company']
+        if connection['company']:
+            companies.add(connection['company']['name'])
 
     jobs = []
     for company in companies:
-        logging.info('Downloading all {} jobs from company {}'.format(args.keyword, company))
         jobs.extend(get_all_indeed_jobs(args.keyword, company, args.city, args.state))
 
     jobs_obj_to_csv(jobs)
+
+    print('All done.')
 
 
 if __name__ == '__main__':
