@@ -26,7 +26,7 @@ JobContainer = collections.namedtuple('JobContainer', ['link', 'title', 'company
 
 # configure logger
 logger = logging.getLogger('jobhuntpy')
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 ch = logging.StreamHandler(sys.stdout)
 
