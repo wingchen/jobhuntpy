@@ -4,19 +4,21 @@ Usage:
     python setup.py py2app
 """
 
-from setuptools import setup
-
-APP = ['jobhuntpy.py']
+from distutils.core import setup
 
 setup(
-    app=APP,
-    install_requires=['argparse', 'nose', 'requests'],
-    author="Winston Chen",
-    author_email="darwing.chen@gmail.com",
+    name='jobhuntpy',
+    version='0.0.1',
+    author='',
+    author_email='',
+    packages=['jobhuntpy'],
+    scripts=[],
+    url='https://github.com/wingchen/jobhuntpy',
+    install_requires=['argparse', 'nose', 'requests', 'beautifulsoup4'],
     license='MIT',
     entry_points={
         'console_scripts': [
-            'jobhuntpy=jobhuntpy:main',
+            'jobhuntpy=jobhuntpy.jobhuntpy:main',
         ],
     },
 )

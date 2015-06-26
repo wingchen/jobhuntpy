@@ -26,7 +26,7 @@ JobContainer = collections.namedtuple('JobContainer', ['link', 'title', 'company
 
 # configure logger
 logger = logging.getLogger('jobhuntpy')
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 ch = logging.StreamHandler(sys.stdout)
 
@@ -41,10 +41,10 @@ def parse_args():
         description='jobhuntpy grab all the open jobs from indeed.com based on the keyword, ' +
                     'location your desire, and your linkedin connections.')
 
-    parser.add_argument('-e', '--email', type=str, help='The email you used to sign up in linkedin.')
-    parser.add_argument('-k', '--keyword', type=str, help='The keyword you wish to appear in the matched jobs.')
-    parser.add_argument('-c', '--city', type=str, help='The city you wish to work in.')
-    parser.add_argument('-s', '--state', type=str, help='The state of the city, for example, CA for California.')
+    parser.add_argument('email', type=str, help='The email you used to sign up in linkedin.')
+    parser.add_argument('keyword', type=str, help='The keyword you wish to appear in the matched jobs.')
+    parser.add_argument('city', type=str, help='The city you wish to work in.')
+    parser.add_argument('state', type=str, help='The state of the city, for example, CA for California.')
 
     logger.info('Argument parsing successful.')
 
@@ -163,7 +163,7 @@ def get_all_indeed_jobs(keyword, company, city, state, radius=50):
 
     # thread out to get all the job posting in the pages
     if all_job_count != 0:
-        page_counts = collections.deque(range(all_job_count / 10)) if all_job_count != 0 else [0]
+        page_counts = collections.deque(range(all_job_count / 10)) if all_job_count > 10 else [0]
 
         logger.debug('Page numbers to crawl: {}'.format(page_counts))
 
@@ -178,7 +178,7 @@ def get_all_indeed_jobs(keyword, company, city, state, radius=50):
                     thread_pool.remove(t)
 
             # spin of threads if thread count less than 10
-            if len(thread_pool) < 10:
+            if len(thread_pool) < 10 and len(page_counts) > 0:
                 page = page_counts.pop()
 
                 logger.debug('Threading out to get jobs in company {} for query page no. {}'.format(company, page))

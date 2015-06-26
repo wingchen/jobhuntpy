@@ -39,7 +39,10 @@ N/A
 Run jobhuntpy command with all the arguments of linkedin email, keyword, city, and state like this:
 
 ```
-jobhuntpy -e darwing.chen@gmail.com -k software\ engineering -c San\ Francisco -s CA
+jobhuntpy [email] [keyword] [city] [state]
+
+# exp:
+jobhuntpy darwing.chen@gmail.com software\ engineering San\ Francisco CA
 ```
 
 You can do `jobhuntpy -h` for the help information.
@@ -88,9 +91,8 @@ This software only automates logging into linkedin, pulling your connection data
 opening you might be interested in for you. You are the person who is conduction the activities and the only one who
 has the data back.
 
-## TODOs:
+## TODO
 
-0. the final count does not match. debug
 1. handle thread failure
 2. build up mac/windows GUI
 3. test cases
