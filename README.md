@@ -6,7 +6,7 @@ Often times, you wonder how you can leverage your networking to land on a job yo
 browse through your friend's companies that you are interested in, and come back to query in indeed.com to see if these 
 companies some ideal job openings for you.
 
-Going back and forth between indeed.com and linkein can take up a lot of time. Their web UIs are just not designed for it.
+Going back and forth between indeed.com and linkedin can take up a lot of time. Their web UIs are just not designed for it.
 You might end up spending 80% of the time and effort to compile the data into a spreadsheet before you can even analyze
 the the companies, job titles, when were they first appeared... etc.
 
@@ -74,7 +74,7 @@ Here is a screenshot from jobs.csv as an example.
 ## Open source and contribute
 
 
-## Why jobhuntpy is not a web service?
+## Why not a web service?
 
 I hate giving data to clouds, so nor do I have any interest in storing your data. I only do it in projects which provide
 more value if I do so. And this ain't one.
