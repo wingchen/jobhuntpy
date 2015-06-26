@@ -74,7 +74,15 @@ Here is a screenshot from jobs.csv as an example.
 ## Open source and contribute
 
 
-## Why jobhuntpy is not a web service
+## Why jobhuntpy is not a web service?
 
+I hate giving data to clouds, so nor do I have any interest in storing your data. I only do it in projects which provide
+more value if I do so. And this ain't one.
+
+This software only automates logging into linkedin, pulling your connection data, and querying on indeed.com for job
+opening you might be interested in for you. You are the person who is conduction the activities and the only one who
+has the data back.
 
 ## Bugs and requests
+
+Please file a bug or request to me through the github UI: https://github.com/wingchen/jobhuntpy/issues/new
