@@ -1,5 +1,4 @@
 # TODO: handle thread failure
-# TODO: logging to console
 # TODO: build up mac/windows GUI
 # TODO: test cases
 
@@ -31,10 +30,9 @@ JobContainer = collections.namedtuple('JobContainer', ['link', 'title', 'company
 
 # configure logger
 logger = logging.getLogger('jobhuntpy')
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 ch = logging.StreamHandler(sys.stdout)
-ch.setLevel(logging.INFO)
 
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 ch.setFormatter(formatter)
@@ -50,6 +48,8 @@ def parse_args():
     parser.add_argument('-k', '--keyword', type=str, help='The keyword you wish to appear in the matched jobs.')
     parser.add_argument('-c', '--city', type=str, help='The city you wish to work in.')
     parser.add_argument('-s', '--state', type=str, help='The state of the city, for example, CA for California.')
+
+    logger.info('Argument parsing successful.')
 
     return parser.parse_args()
 
