@@ -88,6 +88,13 @@ This software only automates logging into linkedin, pulling your connection data
 opening you might be interested in for you. You are the person who is conduction the activities and the only one who
 has the data back.
 
+## TODOs:
+
+1. handle thread failure
+2. build up mac/windows GUI
+3. test cases
+4. the installation part in readme
+
 ## Bugs and requests
 
 Please file a bug or request to me through the github UI: https://github.com/wingchen/jobhuntpy/issues/new

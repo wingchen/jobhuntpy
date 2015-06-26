@@ -1,8 +1,3 @@
-# TODO: handle thread failure
-# TODO: build up mac/windows GUI
-# TODO: test cases
-# README message
-
 import argparse
 import collections
 import csv
