@@ -112,3 +112,7 @@ has the data back.
 ## Bugs and requests
 
 Please file a bug or request to me through the github UI: https://github.com/wingchen/jobhuntpy/issues/new
+
+## Licence
+
+MIT
