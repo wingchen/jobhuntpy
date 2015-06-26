@@ -28,7 +28,19 @@ Happy job hunting.
 
 ## Installation
 
-N/A
+**jobhuntpy can only be installed through pip for now.**
+
+Download and unzip the source file into a folder on your computer directly from GitHub:
+https://github.com/wingchen/jobhuntpy/archive/master.zip
+
+cd into your root jobhuntpy folder, and pip install the folder:
+
+```
+cd /path/to/my/jobhuntpy/folder/jobhuntpy/
+pip install .
+```
+
+Voila, you have jobhuntpy installed on your machine.
 
 ## workflow
 
@@ -96,7 +108,6 @@ has the data back.
 1. handle thread failure
 2. build up mac/windows GUI
 3. test cases
-4. the installation part in readme
 
 ## Bugs and requests
 
