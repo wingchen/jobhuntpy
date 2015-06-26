@@ -24,9 +24,13 @@ friends are able to help you.
 The best part of spreadsheets like csv files is that you are now able to filter, sort, and join all the data with your
 excellent excel skills.
 
+## Installation
+
 ## workflow
 
-* At the moment, jobhuntpy can only be accessed through command line interface. GUI version will follow soon.
+** At the moment, jobhuntpy can only be accessed through command line interface. GUI version will follow soon. **
+
+### Run the command
 
 Run jobhuntpy command with all the arguments of linkedin email, keyword, city, and state like this:
 
@@ -36,11 +40,39 @@ jobhuntpy -e darwing.chen@gmail.com -k software\ engineering -c San\ Francisco -
 
 You can do `jobhuntpy -h` for the help information.
 
-* Please add `\` in front of any space character in a single argument, for example `-k software\ engineering`.
-  
+** Please add `\` in front of any space character in a single argument, for example `-k software\ engineering`. **
 
+You should see the program is asking for your linkedin password to continue, just type the password and hit enter.
 
-## Open source
+```
+2015-06-25 21:55:41,992 - jobhuntpy - INFO - Argument parsing successful.
+Please type in your linkedin password.
+Password: 
+```
+
+You will then see jobhuntpy goes out and grabs all the data for you.
+
+```
+2015-06-25 21:57:11,156 - jobhuntpy - INFO - Found 21 related jobs at Uber in San Francisco
+2015-06-25 21:57:12,403 - jobhuntpy - INFO - Found 561 related jobs at Apple in San Francisco
+2015-06-25 21:57:13,628 - jobhuntpy - INFO - Found 3 related jobs at 3D Robotics in San Francisco
+2015-06-25 21:57:14,161 - jobhuntpy - INFO - Found 1 related jobs at Grand Rounds, Inc. in San Francisco
+2015-06-25 21:57:14,439 - jobhuntpy - INFO - Found 0 related jobs at PayScale, Inc. in San Francisco
+2015-06-25 21:57:15,459 - jobhuntpy - INFO - Found 39 related jobs at Dell in San Francisco
+2015-06-25 21:57:16,693 - jobhuntpy - INFO - Found 0 related jobs at Adviso in San Francisco
+2015-06-25 21:57:18,491 - jobhuntpy - INFO - Found 48 related jobs at Verizon in San Francisco
+```
+
+You then will see connections.csv and jobs.csv in the same folde you are in.
+
+Here is a screenshot from jobs.csv as an example.
+
+![jobhuntpy screenshot](screenshot.png)
+
+## Open source and contribute
 
 
 ## Why jobhuntpy is not a web service
+
+
+## Bugs and requests
