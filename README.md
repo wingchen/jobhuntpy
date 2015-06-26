@@ -30,7 +30,7 @@ Happy job hunting.
 
 ## workflow
 
-** At the moment, jobhuntpy can only be accessed through command line interface. GUI version will follow soon. **
+**At the moment, jobhuntpy can only be accessed through command line interface. GUI version will follow soon.**
 
 ### Run the command
 
@@ -42,7 +42,7 @@ jobhuntpy -e darwing.chen@gmail.com -k software\ engineering -c San\ Francisco -
 
 You can do `jobhuntpy -h` for the help information.
 
-** Please add `\` in front of any space character in a single argument, for example `-k software\ engineering`. **
+**Please add `\` in front of any space character in a single argument, for example `-k software\ engineering`.**
 
 You should see the program is asking for your linkedin password to continue, just type the password and hit enter.
 
