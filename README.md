@@ -26,6 +26,20 @@ excellent excel skills.
 
 ## workflow
 
+* At the moment, jobhuntpy can only be accessed through command line interface. GUI version will follow soon.
+
+Run jobhuntpy command with all the arguments of linkedin email, keyword, city, and state like this:
+
+```
+jobhuntpy -e darwing.chen@gmail.com -k software\ engineering -c San\ Francisco -s CA
+```
+
+You can do `jobhuntpy -h` for the help information.
+
+* Please add `\` in front of any space character in a single argument, for example `-k software\ engineering`.
+  
+
+
 ## Open source
 
 
