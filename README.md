@@ -8,7 +8,7 @@ companies some ideal job openings for you.
 
 Going back and forth between indeed.com and linkedin can take up a lot of time. Their web UIs are just not designed for it.
 You might end up spending 80% of the time and effort to compile the data into a spreadsheet before you can even analyze
-the the companies, job titles, when were they first appeared... etc.
+the the companies, job titles, when they first appeared... etc.
 
 jobhuntpy takes care all of these for you. As you will see in the followup sessions, as soon as you provide your linkedin
 login credential and other credentials like job keyword, city, and state, it is able to provide you with 2 csv files,
