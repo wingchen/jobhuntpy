@@ -10,7 +10,7 @@ Going back and forth between indeed.com and linkein can take up a lot of time. T
 You might end up spending 80% of the time and effort to compile the data into a spreadsheet before you can even analyze
 the the companies, job titles, when were they first appeared... etc.
 
-jobhuntpy takes all of these for you. As you will see in the followup sessions, as soon as you provide your linkedin
+jobhuntpy takes care all of these for you. As you will see in the followup sessions, as soon as you provide your linkedin
 login credential and other credentials like job keyword, city, and state, it is able to provide you with 2 csv files,
 connections.csv and jobs.csv.
 
@@ -23,6 +23,8 @@ friends are able to help you.
 
 The best part of spreadsheets like csv files is that you are now able to filter, sort, and join all the data with your
 excellent excel skills.
+
+Happy job hunting.
 
 ## Installation
 
