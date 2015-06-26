@@ -28,6 +28,8 @@ Happy job hunting.
 
 ## Installation
 
+N/A
+
 ## workflow
 
 **At the moment, jobhuntpy can only be accessed through command line interface. GUI version will follow soon.**
@@ -73,6 +75,9 @@ Here is a screenshot from jobs.csv as an example.
 
 ## Open source and contribute
 
+jobhuntpy is an open-sourced project. The project is hosted in GitHub: https://github.com/wingchen/jobhuntpy
+
+Patches and feature contributions are welcome. Please send the pull requests to me.
 
 ## Why not a web service?
 
