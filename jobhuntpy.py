@@ -163,10 +163,13 @@ def get_all_indeed_jobs(keyword, company, city, state, radius=50):
     # thread out to get all the job posting in the pages
     if all_job_count != 0:
         page_counts = collections.deque(range(all_job_count / 10)) if all_job_count != 0 else [0]
+
+        logger.debug('Page numbers to crawl: {}'.format(page_counts))
+
         thread_pool = []
 
         # thread out to get jobs
-        while len(page_counts) != 0 and len(thread_pool) == 0:
+        while len(page_counts) != 0 or len(thread_pool) != 0:
 
             # remove the done threads
             for t in thread_pool:
@@ -175,7 +178,11 @@ def get_all_indeed_jobs(keyword, company, city, state, radius=50):
 
             # spin of threads if thread count less than 10
             if len(thread_pool) < 10:
-                args = (page_counts.pop(), keyword, company, city, state, radius, all_jobs)
+                page = page_counts.pop()
+
+                logger.debug('Threading out to get jobs in company {} for query page no. {}'.format(company, page))
+
+                args = (page, keyword, company, city, state, radius, all_jobs)
                 thread = threading.Thread(target=_parse_single_page_for_jobs, args=args)
 
                 thread.setDaemon(True)

@@ -90,6 +90,7 @@ has the data back.
 
 ## TODOs:
 
+0. the final count does not match. debug
 1. handle thread failure
 2. build up mac/windows GUI
 3. test cases
