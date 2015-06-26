@@ -38,8 +38,9 @@ logger.addHandler(ch)
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description='We need your linkedin email and password to aggregate your data for you.')
-    # args.keyword, args.city, args.state
+        description='jobhuntpy grab all the open jobs from indeed.com based on the keyword, ' +
+                    'location your desire, and your linkedin connections.')
+
     parser.add_argument('-e', '--email', type=str, help='The email you used to sign up in linkedin.')
     parser.add_argument('-k', '--keyword', type=str, help='The keyword you wish to appear in the matched jobs.')
     parser.add_argument('-c', '--city', type=str, help='The city you wish to work in.')
