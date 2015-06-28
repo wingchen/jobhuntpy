@@ -15,9 +15,6 @@ class LoginController(NSWindowController):
     def windowDidLoad(self):
         NSWindowController.windowDidLoad(self)
 
-    def updateDisplay(self):
-        pass
-
     @objc.IBAction
     def login(self, sender):
         # if not logged-in, show the error message in the label

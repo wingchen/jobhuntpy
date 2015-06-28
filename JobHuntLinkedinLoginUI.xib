@@ -4,7 +4,14 @@
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-2" userLabel="File's Owner" customClass="LoginController">
+            <connections>
+                <outlet property="emailField" destination="cga-3k-Y3X" id="Pq1-7C-E9P"/>
+                <outlet property="loginButton" destination="o5g-FJ-KID" id="DYS-6S-QMM"/>
+                <outlet property="messageLabel" destination="z9f-Dq-STh" id="Qrg-Ml-k1Z"/>
+                <outlet property="passwordField" destination="KqW-Ng-Ptp" id="eQp-pk-diw"/>
+            </connections>
+        </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
@@ -55,8 +62,11 @@
                         <rect key="frame" x="61" y="19" width="232" height="19"/>
                         <buttonCell key="cell" type="roundRect" title="Login to Linkedin for Connection Data" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="EZf-lL-W33">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="controlContent"/>
+                            <font key="font" metaFont="cellTitle"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="login:" target="-2" id="xBb-KH-HMY"/>
+                        </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z9f-Dq-STh">
                         <rect key="frame" x="59" y="46" width="236" height="17"/>
