@@ -116,3 +116,8 @@ Please file a bug or request to me through the github UI: https://github.com/win
 ## Licence
 
 MIT
+
+## About Me
+
+You will find everything on my blog:
+http://www.winstonchen.co/
