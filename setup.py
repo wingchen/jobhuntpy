@@ -7,27 +7,27 @@ Usage:
 
 from setuptools import setup
 
-APP = ['jobhuntpy.py']
+APP = ['login_controller.py']
 DATA_FILES = ['JobHuntPyUI.xib', 'JobHuntLinkedinLoginUI.xib']
 OPTIONS = {'argv_emulation': True}
 
 setup(
     name='jobhuntpy',
     version='0.0.1',
-    author='',
-    author_email='',
-    packages=['jobhuntpy'],
+    author='Winston Chen',
+    author_email='darwing.chen@gmail.com',
+    packages=['.'],
     scripts=[],
     app=APP,
     data_files=DATA_FILES,
     options={'py2app': OPTIONS},
     setup_requires=['py2app'],
     url='https://github.com/wingchen/jobhuntpy',
-    install_requires=['argparse', 'nose', 'requests', 'beautifulsoup4', 'pyobjc'],
+    # install_requires=['argparse', 'nose', 'requests', 'beautifulsoup4', 'pyobjc'],
     license='MIT',
-    entry_points={
-        'console_scripts': [
-            'jobhuntpy=jobhuntpy.jobhuntpy:main',
-        ],
-    },
+    # entry_points={
+    #     'console_scripts': [
+    #         'jobhuntpy=jobhuntpy:main',
+    #     ],
+    # },
 )

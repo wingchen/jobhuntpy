@@ -7,17 +7,17 @@
         <customObject id="-2" userLabel="File's Owner" customClass="LoginController">
             <connections>
                 <outlet property="emailField" destination="cga-3k-Y3X" id="Pq1-7C-E9P"/>
-                <outlet property="loginButton" destination="o5g-FJ-KID" id="DYS-6S-QMM"/>
+                <outlet property="loginButton" destination="o5g-FJ-KID" id="F8Q-l3-ddd"/>
                 <outlet property="messageLabel" destination="z9f-Dq-STh" id="Qrg-Ml-k1Z"/>
-                <outlet property="passwordField" destination="KqW-Ng-Ptp" id="eQp-pk-diw"/>
+                <outlet property="passwordField" destination="KqW-Ng-Ptp" id="ZEx-XW-Ld2"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
+        <window title="Linkedin Login" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="355" height="157"/>
+            <rect key="contentRect" x="568" y="371" width="355" height="157"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="-1" width="355" height="157"/>
@@ -65,7 +65,7 @@
                             <font key="font" metaFont="cellTitle"/>
                         </buttonCell>
                         <connections>
-                            <action selector="login:" target="-2" id="xBb-KH-HMY"/>
+                            <action selector="logIntoLinkedin:" target="-2" id="UjG-pb-6su"/>
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z9f-Dq-STh">
@@ -78,7 +78,7 @@
                     </textField>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="180.5" y="311.5"/>
+            <point key="canvasLocation" x="306.5" y="286.5"/>
         </window>
     </objects>
 </document>
