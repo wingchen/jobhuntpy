@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import argparse
 import collections
 import csv
@@ -163,7 +165,7 @@ def get_all_indeed_jobs(keyword, company, city, state, radius=50):
 
     # thread out to get all the job posting in the pages
     if all_job_count != 0:
-        page_counts = collections.deque(range(all_job_count / 10)) if all_job_count > 10 else [0]
+        page_counts = collections.deque(range((all_job_count / 10) + 1)) if all_job_count > 10 else [0]
 
         logger.debug('Page numbers to crawl: {}'.format(page_counts))
 
