@@ -7,8 +7,8 @@ Usage:
 
 from setuptools import setup
 
-APP = ['login_controller.py']
-DATA_FILES = ['JobHuntPyUI.xib', 'JobHuntLinkedinLoginUI.xib']
+APP = ['mac_ui_controller.py']
+DATA_FILES = ['JobHuntPyUI.xib', 'JobHuntPyUIMenu.xib', 'JobHuntLinkedinLoginUI.xib']
 OPTIONS = {'argv_emulation': True}
 
 setup(
