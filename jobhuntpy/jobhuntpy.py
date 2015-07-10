@@ -81,16 +81,22 @@ def get_all_connections(email, password):
     connections_obj = response.json()
 
     logger.debug(json.dumps(connections_obj, indent=4))
-    logger.info('Total Connection count: {}'.format(connections_obj['paging']['total']))
 
-    query = 'contacts/api/contacts/more/?start=0&count={}&fields=id%2Cname%2Ccompany%2Ctitle%2Cgeo_location'.format(
-        connections_obj['paging']['total'])
-    response = client.get('{}{}'.format(LINKEDIN_ENDPOINT, query), headers=MOCK_BROWSER_AGENT, timeout=60)
+    return_value = None
 
-    connections_obj = response.json()
-    logger.debug(json.dumps(connections_obj, indent=4))
+    if 'paging' in connections_obj:
+        logger.info('Total Connection count: {}'.format(connections_obj['paging']['total']))
 
-    return connections_obj['contacts']
+        query = 'contacts/api/contacts/more/?start=0&count={}&fields=id%2Cname%2Ccompany%2Ctitle%2Cgeo_location'.format(
+            connections_obj['paging']['total'])
+        response = client.get('{}{}'.format(LINKEDIN_ENDPOINT, query), headers=MOCK_BROWSER_AGENT, timeout=60)
+
+        connections_obj = response.json()
+        logger.debug(json.dumps(connections_obj, indent=4))
+
+        return_value = connections_obj['contacts']
+
+    return return_value
 
 
 def _parse_single_page_for_jobs(page_number, keyword, company, city, state, radius, result_jobs):
